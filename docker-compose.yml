@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  mapbox-mcp-server:
+    build:
+      context: ./mapbox-mcp-server
+      dockerfile: Dockerfile
+    container_name: mapbox-mcp-server
+    restart: unless-stopped
+    environment:
+      - PORT=3000
+      - MAPBOX_ACCESS_TOKEN=${MAPBOX_ACCESS_TOKEN}
+      - NODE_ENV=production
+    ports:
+      - "3000:3000"
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http = require('http'); const options = { host: 'localhost', port: 3000, path: '/health', timeout: 2000 }; const request = http.request(options, (res) => { console.log('STATUS:', res.statusCode); process.exitCode = res.statusCode === 200 ? 0 : 1; }); request.on('error', (err) => { console.log('ERROR', err); process.exitCode = 1; }); request.end();"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - mapbox-network
+
+  http-bridge:
+    build:
+      context: ./http-bridge
+      dockerfile: Dockerfile
+    container_name: mapbox-http-bridge
+    restart: unless-stopped
+    environment:
+      - PORT=3001
+      - MCP_SERVER_URL=http://mapbox-mcp-server:3000
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - CORS_ORIGIN=*
+      - NODE_ENV=production
+    ports:
+      - "3001:3001"
+    depends_on:
+      mapbox-mcp-server:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "const http = require('http'); const options = { host: 'localhost', port: 3001, path: '/health', timeout: 2000 }; const request = http.request(options, (res) => { console.log('STATUS:', res.statusCode); process.exitCode = res.statusCode === 200 ? 0 : 1; }); request.on('error', (err) => { console.log('ERROR', err); process.exitCode = 1; }); request.end();"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - mapbox-network
+
+networks:
+  mapbox-network:
+    driver: bridge

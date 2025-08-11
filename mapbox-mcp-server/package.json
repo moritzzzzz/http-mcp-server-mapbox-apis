@@ -1,0 +1,22 @@
+{
+  "name": "mapbox-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for Mapbox APIs",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "axios": "^1.6.0",
+    "express": "^4.18.0",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "express-rate-limit": "^7.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
