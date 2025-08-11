@@ -2,6 +2,10 @@
 
 A complete solution that provides Mapbox API services through a Model Context Protocol (MCP) server with HTTP endpoints, featuring an AI-powered chat interface using Claude Sonnet 4.
 
+## UI
+<img width="558" height="908" alt="image" src="https://github.com/user-attachments/assets/a7be0b5e-a342-402a-9d9a-157dece1614d" />
+
+
 ## Architecture
 
 The application consists of two main services:
@@ -33,7 +37,7 @@ The application consists of two main services:
 
 1. **Clone and setup environment**:
    ```bash
-   git clone <your-repo>
+   git clone https://github.com/moritzzzzz/http-mcp-server-mapbox-apis
    cd mapbox_mcp_http
    cp .env.example .env
    ```
@@ -242,4 +246,4 @@ curl http://localhost:3001/health
 
 ## License
 
-This project is provided as-is for educational and development purposes. Make sure to comply with Mapbox and Anthropic API terms of service.
+See attached license.md. Make sure to comply with Mapbox and Anthropic API terms of service.
